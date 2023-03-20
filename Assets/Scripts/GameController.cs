@@ -4,6 +4,18 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class Player
+{
+    public Image Panel;
+    public TextMeshProUGUI text;
+}
+[System.Serializable]
+public class PlayerColor
+{
+    public Color PanelColor;
+    public Color TextColor;
+}
 public class GameController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] BtnList;
@@ -12,6 +24,10 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject RestartBtn;
     private string PlayerSide;
     private int MoveCount;
+    public Player PlayerX;
+    public Player PlayerO;
+    public PlayerColor ActivePlayerColor;
+    public PlayerColor InactivePlayerColor;
 
     void Awake()
     {
@@ -20,6 +36,7 @@ public class GameController : MonoBehaviour
         PlayerSide = "X";
         MoveCount = 0;
         RestartBtn.SetActive(false);
+        SetPlayerColors(PlayerX, PlayerO);
     }
    
     void SetGameControllerReferenceOnButtons()
@@ -89,7 +106,13 @@ public class GameController : MonoBehaviour
         ChangeSide();
     }
 
-   
+   void SetPlayerColors(Player NewPlayer, Player OldPlayer)
+    {
+        NewPlayer.Panel.color = ActivePlayerColor.PanelColor;
+        NewPlayer.text.color = ActivePlayerColor.TextColor;
+        OldPlayer.Panel.color = InactivePlayerColor.PanelColor;
+        OldPlayer.text.color = InactivePlayerColor.TextColor;
+    }
    void GameOver(string WinningPlayer)
     {
 
@@ -114,6 +137,15 @@ public class GameController : MonoBehaviour
     void ChangeSide()
     {
         PlayerSide = (PlayerSide == "X")?"O":"X";
+
+        if(PlayerSide == "X")
+        {
+            SetPlayerColors(PlayerX,PlayerO);
+        }
+        else
+        {
+            SetPlayerColors(PlayerO, PlayerX);
+        }
     }
 
     void SetGameOverText(string Value)
@@ -126,15 +158,17 @@ public class GameController : MonoBehaviour
         MoveCount = 0;
         PlayerSide = "X";
         GameOverPanel.SetActive(false);
+        
 
         SetBoardInteractable(true);
+        
 
         for (int i = 0; i < BtnList.Length; i++)
         {
             BtnList[i].GetComponentInParent<Button>().interactable = true;
             BtnList[i].text = "";
         }
-
+        SetPlayerColors(PlayerX, PlayerO);
         RestartBtn.SetActive(false);
     }
 
