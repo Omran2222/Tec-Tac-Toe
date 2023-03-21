@@ -23,13 +23,25 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject GameOverPanel;
     [SerializeField] TextMeshProUGUI GameOverText;
     [SerializeField] GameObject RestartBtn;
-    private string PlayerSide;
-    private int MoveCount;
+
+    //---------------Public-------------------
     public Player PlayerX;
     public Player PlayerO;
     public PlayerColor ActivePlayerColor;
     public PlayerColor InactivePlayerColor;
     public GameObject StartInfo;
+    public bool IsPlayerMove;
+    public float Delay;
+    //----------------------------------------
+
+
+
+    //---------------Private-------------------
+    private string PlayerSide;
+    private int MoveCount;
+    private string ComputerSide;
+    private int Valu;
+    //-----------------------------------------
 
     void Awake()
     {
@@ -38,9 +50,30 @@ public class GameController : MonoBehaviour
         //PlayerSide = "X";
         MoveCount = 0;
         RestartBtn.SetActive(false);
+        IsPlayerMove = true;
         //SetPlayerColors(PlayerX, PlayerO);
     }
-   
+
+    private void Update()
+    {
+        if(IsPlayerMove == true)
+        {
+            Delay += Delay * Time.deltaTime;
+            if(Delay >= 100)
+            {
+                //you can replace BtnList by 8 because 8 elements number insaide the list
+                Valu = Random.Range(0, BtnList.Length);
+
+                if(BtnList[Valu].GetComponentInParent<Button>().interactable == true)
+                {
+                    BtnList[Valu].text = GetCoumputerSide();
+                    BtnList[Valu].GetComponentInParent<Button>().interactable = false;
+                    EndTurn();
+                }
+            }
+        }
+    }
+
     void SetGameControllerReferenceOnButtons()
     {
         for (int i = 0; i < BtnList.Length; i++)
@@ -49,19 +82,19 @@ public class GameController : MonoBehaviour
         }
         
     }
-    public void SetPlayerSide(string StartingSide)
+    public void SetStartingSide(string StartingSide)
     {
-        PlayerSide = StartingSide;
-
-
+       
         PlayerSide = StartingSide;
 
         if (PlayerSide == "X")
         {
+            ComputerSide = "O";
             SetPlayerColors(PlayerX, PlayerO);
         }
         else
         {
+            ComputerSide = "X";
             SetPlayerColors(PlayerO, PlayerX);
 
         }
@@ -79,11 +112,16 @@ public class GameController : MonoBehaviour
         return PlayerSide;
     }
 
+    public string GetCoumputerSide()
+    {
+        return ComputerSide;
+    }
+
     public void EndTurn()
     {
         MoveCount++;
 
-        //---------------------------------------------------------------------------------------------------
+        //----------------------------------this Player Side-----------------------------------------------------------------
 
         if (BtnList[0].text == PlayerSide && BtnList[1].text == PlayerSide && BtnList[2].text == PlayerSide)
         {
@@ -120,11 +158,49 @@ public class GameController : MonoBehaviour
             GameOver(PlayerSide);
         }
 
-        //-----------------------------------------------------------------------------------------------------
+        //--------------------------------------------------End---------------------------------------------------
 
-       
 
-        if(MoveCount >= 9)
+        //----------------------------------------------This Computer Side-------------------------------------------------------
+
+        if (BtnList[0].text == ComputerSide && BtnList[1].text == ComputerSide && BtnList[2].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[3].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[5].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[6].text == ComputerSide && BtnList[7].text == ComputerSide && BtnList[8].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[0].text == ComputerSide && BtnList[3].text == ComputerSide && BtnList[6].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[1].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[7].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[0].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[8].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        if (BtnList[2].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[6].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        //-----------------------------------------End----------------------------------------------------
+
+        if (MoveCount >= 9)
         {
             GameOver("Draw");
         }
@@ -163,12 +239,13 @@ public class GameController : MonoBehaviour
 
     void ChangeSide()
     {
-        PlayerSide = (PlayerSide == "X")?"O":"X";
-
-        if(PlayerSide == "X")
+        //PlayerSide = (PlayerSide == "X")?"O":"X";
+        IsPlayerMove = (IsPlayerMove == true) ? false : true;
+       // if(PlayerSide == "X")
+        if(IsPlayerMove == true)
         {
             SetPlayerColors(PlayerX,PlayerO);
-            SetPlayerColorInactive();
+            
         }
         else
         {
@@ -190,6 +267,8 @@ public class GameController : MonoBehaviour
         SetPlayerButton(true);
         SetPlayerColorInactive();
         StartInfo.SetActive(true);
+        IsPlayerMove = true;
+        Delay = 10;
         //PlayerSide = "X";
 
         for (int i = 0; i < BtnList.Length; i++)

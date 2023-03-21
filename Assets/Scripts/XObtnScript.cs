@@ -15,10 +15,14 @@ public class XObtnScript : MonoBehaviour
 
     public  void SetSpace()
     {
-        TextBtn.text = GameContr.GetPlayerSide();
-        Btn.interactable = false;
-        GameContr.EndTurn();
-       
+        if(GameContr.IsPlayerMove == true)
+        {
+            TextBtn.text = GameContr.GetPlayerSide();
+            Btn.interactable = false;
+            GameContr.EndTurn();
+
+        }
+
     }
 
     public void SetGameContrRefrence(GameController Contro)
