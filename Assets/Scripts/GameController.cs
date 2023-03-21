@@ -129,7 +129,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            SetGameOverText(WinningPlayer + "Win");
+            SetGameOverText($"Player {WinningPlayer} Win");
         }
         RestartBtn.SetActive(true);
     }
