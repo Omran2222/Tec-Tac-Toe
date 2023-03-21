@@ -8,11 +8,12 @@ using UnityEngine;
 
 public class XObtnScript : MonoBehaviour
 {
-    [SerializeField] Button Btn;
-    [SerializeField] TextMeshProUGUI TextBtn;
+    public Button Btn;
+    public TextMeshProUGUI TextBtn;
    
     private GameController GameContr;
 
+   
     public  void SetSpace()
     {
         if(GameContr.IsPlayerMove == true)
@@ -29,4 +30,6 @@ public class XObtnScript : MonoBehaviour
     {
         GameContr = Contro;
     }
+
+
 }
