@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -33,6 +34,7 @@ public class GameController : MonoBehaviour
     public GameObject StartInfo;
     public bool IsPlayerMove;
     public float Delay;
+    public NavMeshAgent NMA;
     //----------------------------------------
 
 
@@ -115,6 +117,8 @@ public class GameController : MonoBehaviour
 
     public string GetCoumputerSide()
     {
+       
+      
         return ComputerSide;
     }
 
@@ -154,6 +158,11 @@ public class GameController : MonoBehaviour
             GameOver(PlayerSide);
         }
 
+        else if (BtnList[2].text == PlayerSide && BtnList[5].text == PlayerSide && BtnList[8].text == PlayerSide)
+        {
+            GameOver(PlayerSide);
+        }
+
         else if (BtnList[2].text == PlayerSide && BtnList[4].text == PlayerSide && BtnList[6].text == PlayerSide)
         {
             GameOver(PlayerSide);
@@ -167,7 +176,7 @@ public class GameController : MonoBehaviour
 
         else if (BtnList[0].text == ComputerSide && BtnList[1].text == ComputerSide && BtnList[2].text == ComputerSide)
         {
-            GameOver(ComputerSide);
+            GameOver(NMA.ToString());
         }
 
         else if (BtnList[3].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[5].text == ComputerSide)
@@ -191,6 +200,11 @@ public class GameController : MonoBehaviour
         }
 
         else if (BtnList[0].text == ComputerSide && BtnList[4].text == ComputerSide && BtnList[8].text == ComputerSide)
+        {
+            GameOver(ComputerSide);
+        }
+
+        else if (BtnList[2].text == PlayerSide && BtnList[5].text == PlayerSide && BtnList[8].text == PlayerSide)
         {
             GameOver(ComputerSide);
         }
